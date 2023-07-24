@@ -1,5 +1,5 @@
 Sphinx
-psycopg2
+psycopg2-binary
 click
 invoke
 xmltodict
@@ -10,5 +10,6 @@ flake8
 peewee
 beautifulsoup4
 alembic
-Refurb
+refurb
 pylint
+termcolor
