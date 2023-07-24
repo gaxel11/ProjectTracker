@@ -1,0 +1,14 @@
+Sphinx
+psycopg2
+click
+invoke
+xmltodict
+requests
+numpy
+pandas
+flake8
+peewee
+beautifulsoup4
+alembic
+Refurb
+pylint
