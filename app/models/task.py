@@ -1,8 +1,4 @@
-from peewee import AutoField
-from peewee import Model
-from peewee import CharField
-from peewee import TextField
-from peewee import TimeField
+from peewee import AutoField, CharField, Model, TextField, TimeField
 from config.database import database
 
 
@@ -17,3 +13,6 @@ class Task(Model):
     
     class Meta:
         database = database
+        
+
+

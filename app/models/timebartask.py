@@ -1,9 +1,6 @@
-from peewee import AutoField
-from peewee import Model
-from peewee import ForeignKeyField
-from peewee import DateTimeField
-from timebar import TimeBar
-from task import Task
+from .task import Task
+from .timebar import TimeBar
+from peewee import AutoField, DateTimeField, ForeignKeyField, Model
 from config.database import database
 
 
