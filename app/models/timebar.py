@@ -1,6 +1,4 @@
-from peewee import AutoField
-from peewee import Model
-from peewee import DateTimeField
+from peewee import AutoField, DateTimeField, Model
 from config.database import database
 
 

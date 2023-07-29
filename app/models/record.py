@@ -4,7 +4,7 @@ from peewee import TextField
 from peewee import TimeField
 from peewee import ForeignKeyField
 from peewee import DateTimeField
-from task import Task
+from .task import Task
 from config.database import database
 
 
