@@ -53,20 +53,34 @@ def lint(c):
         )
         print(colored(message, "green"))
 
-  
+
 @task
 def create_tables(c):
+    start_time = time.time()
     table_classes = [Task, TimeBar, TimeBarTask, Record]
     if all(table.table_exists() for table in table_classes):
         print("Tables already exist.")
     else:
         try:
             for table in table_classes:
+                print(f"Creating table {table.__name__}...")
                 table.create_table()
-            print("Tables created successfully.")
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            message = (
+                "Tables created successfully. "
+                f"Elapsed time: {elapsed_time:.2f} seconds"
+            )
+            print(colored(message, "green"))
         except OperationalError as e:
-            print("Error creating tables:", str(e))
-
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            message = (
+                f"Error creating tables: {e}. "
+                f"Elapsed time: {elapsed_time:.2f} seconds"
+            )
+            print(colored(message, "red"))
+            
 
 # Crear la colección principal
 ns = Collection()
