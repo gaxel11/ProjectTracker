@@ -9,7 +9,6 @@ pandas
 flake8
 peewee
 beautifulsoup4
-alembic
 refurb
 pylint
 termcolor
