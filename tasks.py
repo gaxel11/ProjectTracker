@@ -1,3 +1,4 @@
+import os
 import time
 
 from invoke import Collection, task
@@ -21,26 +22,28 @@ def install(c):
 
 @task
 def lint(c):
+    # Obtener todos los archivos Python en el directorio actual
+    python_files = [f for f in os.listdir() if f.endswith(".py")]
+    
     start_time = time.time()
     print("--------------Running 'lint' task--------------")
+    
+    # Imprimir los archivos que se van a revisar
+    print("Files to be checked:", ", ".join(python_files))
+    
     print("Running 'pylint'...")
-    results = c.run("pylint .", warn=True).stdout.strip().split("\n")
-    for result in results:
-        print(result)
+    pylint_exit_code = c.run("pylint .", warn=True).return_code
     
     print("Running 'refurb'...")
-    results = c.run("refurb .", warn=True).stdout.strip().split("\n")
-    for result in results:
-        print(result)
+    refurb_exit_code = c.run("refurb .", warn=True).return_code
     
     print("Running 'flake8'...")
-    results = c.run("flake8 .", warn=True).stdout.strip().split("\n")
-    for result in results:
-        print(result)
+    flake8_exit_code = c.run("flake8 .", warn=True).return_code
 
     end_time = time.time()
     elapsed_time = end_time - start_time
-    if any(result.count(":") > 0 for result in results):
+
+    if any([pylint_exit_code, refurb_exit_code, flake8_exit_code]):
         message = (
             "Errors found. Review previous messages. "
             f"Elapsed time: {elapsed_time:.2f} seconds"
