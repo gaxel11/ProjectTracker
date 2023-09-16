@@ -12,3 +12,8 @@ beautifulsoup4
 refurb
 pylint
 termcolor
+Router
+peewee_migrate
+autopep8
+black
+yapf
