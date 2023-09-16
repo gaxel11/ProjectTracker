@@ -6,7 +6,7 @@ from config.database import database
 
 class TimeBarTask(Model):
     id = AutoField(primary_key=True)
-    timebar = ForeignKeyField(TimeBar, backref='tasks')
+    timebar = ForeignKeyField(TimeBar, backref="tasks")
     task = ForeignKeyField(Task)
     start_time = DateTimeField()
     end_time = DateTimeField()
