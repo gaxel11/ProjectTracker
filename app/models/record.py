@@ -10,7 +10,7 @@ from config.database import database
 
 class Record(Model):
     id = AutoField(primary_key=True)
-    task = ForeignKeyField(Task, backref='records')
+    task = ForeignKeyField(Task, backref="records")
     description = TextField(null=True)
     time_spent = TimeField()
     timestamp = DateTimeField()
