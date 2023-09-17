@@ -1,5 +1,7 @@
-from peewee import AutoField, CharField, IntegrityError, Model, TextField, TimeField
+import datetime
+from peewee import AutoField, CharField, Model, TextField
 from config.database import database
+from playhouse.postgres_ext import IntervalField
 
 
 class Task(Model):
@@ -9,63 +11,26 @@ class Task(Model):
     status = CharField(max_length=50)
     repository_url = CharField(max_length=255, null=True)
     page_url = CharField(max_length=254, null=True)
-    time_elapsed = TimeField(null=True)
+    time_elapsed = IntervalField(null=True)
+    time_passed = IntervalField(default=datetime.timedelta(hours=0), null=True)
 
     class Meta:
         database = database
 
-    @classmethod
-    def create_task(
-        cls,
-        title,
-        description,
-        status,
-        repository_url=None,
-        page_url=None,
-        time_elapsed=None,
-    ):
-        try:
-            task = cls.create(
-                title=title,
-                description=description,
-                status=status,
-                repository_url=repository_url,
-                page_url=page_url,
-                time_elapsed=time_elapsed,
-            )
-            return task
-        except IntegrityError as e:
-            return None, str(e)
+    def adjust_time(self, adjustment, subtract=False):
+        """
+        Adjust the time_passed field of the Task model.
 
-    @classmethod
-    def update_task(cls, task_id, **kwargs):
-        try:
-            task = cls.get(cls.id == task_id)
-            for key, value in kwargs.items():
-                setattr(task, key, value)
-            task.save()
-            return task
-        except cls.DoesNotExist:
-            return None
+        Args:
+        - adjustment (datetime.timedelta): Amount of time to adjust.
+        - subtract (bool, optional): If True, subtracts the time. Default is False to add time.
+        """
+        if not isinstance(adjustment, datetime.timedelta):
+            raise ValueError("adjustment should be of type datetime.timedelta")
 
-    @classmethod
-    def delete_task(cls, task_id):
-        try:
-            task = cls.get(cls.id == task_id)
-            task.delete_instance()
-            return True
-        except cls.DoesNotExist:
-            return False
+        if subtract:
+            self.time_passed -= adjustment
+        else:
+            self.time_passed += adjustment
 
-    @classmethod
-    def get_all_tasks(cls):
-        tasks = cls.select()
-        return tasks
-
-    @classmethod
-    def get_task_by_id(cls, task_id):
-        try:
-            task = cls.get(cls.id == task_id)
-            return task
-        except cls.DoesNotExist:
-            return None
+        self.save()  # Persist the change to the database.
